@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Premium - Kizme</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css?v=V005">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-light bg-white shadow-sm">
+        <div class="container-fluid justify-content-between">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+                <img src="img/logo.png" alt="Logo" height="35">
+                <span class="text-danger fw-bold">Acceso Premium</span>
+            </a>
+            <a href="index.html" class="btn btn-outline-secondary btn-sm">Volver</a>
+        </div>
+    </nav>
+
+    <main class="container mt-4 mb-5 pb-5">
+        <!-- Estado actual de suscripción -->
+        <div id="subscription-status" class="mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="mb-3">Estado de tu acceso</h5>
+                    <div id="status-content">
+                        <div class="spinner-border text-danger" role="status"><span class="visually-hidden">Cargando...</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Planes disponibles -->
+        <div id="plans-section" class="mb-4">
+            <h5 class="mb-3">Planes disponibles</h5>
+            <div id="plans-container" class="row g-3">
+                <div class="col-12 text-center">
+                    <div class="spinner-border text-danger" role="status"><span class="visually-hidden">Cargando...</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario de declaración de pago -->
+        <div id="payment-form-section" class="mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Declarar pago</h5>
+                    <p class="text-muted small mb-3">Completa los datos de tu pago para que el administrador lo verifique y active tu acceso.</p>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Plan</label>
+                        <select id="pago-plan" class="form-select" required>
+                            <option value="">Selecciona un plan...</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Monto a pagar</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" id="pago-monto" class="form-control" step="0.01" min="0.01" placeholder="0.00" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Método de pago</label>
+                        <select id="pago-metodo" class="form-select" required>
+                            <option value="">Selecciona método...</option>
+                            <option value="transferencia">Transferencia bancaria</option>
+                            <option value="pago_movil">Pago móvil</option>
+                            <option value="zelle">Zelle</option>
+                            <option value="paypal">PayPal</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Referencia / Número de comprobante</label>
+                        <input type="text" id="pago-referencia" class="form-control" placeholder="Ej: 0000-0000-0000-0000" required>
+                    </div>
+
+                    <div class="mb-3" id="banco-container">
+                        <label class="form-label fw-bold">Banco emisor</label>
+                        <input type="text" id="pago-banco" class="form-control" placeholder="Nombre del banco">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Fecha del pago</label>
+                        <input type="date" id="pago-fecha" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Notas adicionales (opcional)</label>
+                        <textarea id="pago-notas" class="form-control" rows="3" placeholder="Algún detalle que quieras agregar..."></textarea>
+                    </div>
+
+                    <button id="btn-declarar-pago" class="btn btn-danger w-100" onclick="declararPago()">Declarar pago</button>
+                    <p id="pago-message" class="text-danger text-center mt-3 small"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Historial de pagos del usuario -->
+        <div class="mb-4">
+            <h5 class="mb-3">Mis pagos</h5>
+            <div id="pagos-lista">
+                <p class="text-muted text-center small">Cargando historial...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Navegación inferior -->
+    <nav class="navbar navbar-light bg-white fixed-bottom border-top d-flex justify-content-around py-1">
+        <a href="index.html" class="btn btn-link text-decoration-none text-muted text-center">
+            <span style="font-size: 1.5rem;">&#128269;</span><br><small>Descubrir</small>
+        </a>
+        <a href="miskizme.html" class="btn btn-link text-decoration-none text-muted text-center">
+            <span style="font-size: 1.5rem;">&#10084;&#65039;</span><br><small>Mis Kizme</small>
+        </a>
+        <a href="acceso.html" class="btn btn-link text-decoration-none text-danger text-center">
+            <span style="font-size: 1.5rem;">&#128274;</span><br><small>Acceso</small>
+        </a>
+    </nav>
+
+    <script src="js/config.js?v=V005"></script>
+    <script src="js/acceso.js?v=V005"></script>
+</body>
+</html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Kizme</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css?v=V005">
+    <link rel="stylesheet" href="css/dashboard.css?v=V005">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-light">
+
+    <!-- LOGIN ADMIN -->
+    <div id="admin-login" class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card shadow border-0 rounded-4">
+                    <div class="card-body p-4 text-center">
+                        <img src="img/logo.png" alt="Logo" height="50" class="mb-3">
+                        <h4 class="text-danger mb-1">Panel de Administración</h4>
+                        <p class="text-muted small mb-4">Acceso restringido <span class="badge bg-secondary ms-1">V005</span></p>
+                        <input type="text" id="admin-user" class="form-control mb-2" placeholder="Usuario administrador" value="admin">
+                        <input type="password" id="admin-pass" class="form-control mb-3" placeholder="Contraseña" onkeydown="if(event.key==='Enter'){event.preventDefault();adminLogin();}">
+                        <button class="btn btn-danger w-100" onclick="adminLogin()">Ingresar</button>
+                        <p id="login-error" class="text-danger text-center mt-3 small"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD (hidden until login) -->
+    <div id="admin-dashboard" class="hidden">
+        <!-- Top nav -->
+        <nav class="navbar navbar-dark bg-danger shadow-sm">
+            <div class="container-fluid d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                    <img src="img/logo.png" alt="Logo" height="30" style="filter: brightness(0) invert(1);">
+                    <span class="fw-bold">Admin Panel</span>
+                </div>
+                <button class="btn btn-outline-light btn-sm" onclick="adminLogout()">Cerrar sesión</button>
+            </div>
+        </nav>
+
+        <!-- Stats cards -->
+        <div class="container-fluid mt-3 px-3">
+            <div class="row g-2 mb-3" id="stats-row">
+                <div class="col-6 col-md-3">
+                    <div class="card border-0 shadow-sm text-center p-3 stat-card">
+                        <div class="fs-2 fw-bold text-danger" id="stat-users">0</div>
+                        <small class="text-muted">Usuarios</small>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card border-0 shadow-sm text-center p-3 stat-card">
+                        <div class="fs-2 fw-bold text-warning" id="stat-pending">0</div>
+                        <small class="text-muted">Pagos pendientes</small>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card border-0 shadow-sm text-center p-3 stat-card">
+                        <div class="fs-2 fw-bold text-success" id="stat-active-subs">0</div>
+                        <small class="text-muted">Suscripciones activas</small>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="card border-0 shadow-sm text-center p-3 stat-card">
+                        <div class="fs-2 fw-bold text-info" id="stat-blocked">0</div>
+                        <small class="text-muted">Usuarios bloqueados</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab navigation -->
+            <ul class="nav nav-tabs mb-3" id="dashboard-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" onclick="cambiarTab('usuarios', this)">Usuarios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="cambiarTab('pagos', this)">Pagos pendientes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="cambiarTab('bloqueados', this)">Bloqueados</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="cambiarTab('accesos', this)">Costos de acceso</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="cambiarTab('editar', this)">Editar datos</a>
+                </li>
+            </ul>
+
+            <!-- TAB: Usuarios -->
+            <div id="tab-usuarios" class="tab-content active">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white py-2">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0">Todos los usuarios</h6>
+                            <input type="text" id="search-users" class="form-control form-control-sm" style="max-width: 250px;" placeholder="Buscar por nombre o email..." oninput="filtrarUsuarios()">
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-sm mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Foto</th>
+                                        <th>Nombre</th>
+                                        <th>Email</th>
+                                        <th>Género</th>
+                                        <th>Edad</th>
+                                        <th>Ubicación</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users-table-body">
+                                    <tr><td colspan="8" class="text-center p-4">Cargando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Pagos pendientes -->
+            <div id="tab-pagos" class="tab-content hidden">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white py-2">
+                        <h6 class="mb-0">Pagos esperando confirmación</h6>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-sm mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Usuario</th>
+                                        <th>Plan</th>
+                                        <th>Monto</th>
+                                        <th>Método</th>
+                                        <th>Referencia</th>
+                                        <th>Banco</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payments-table-body">
+                                    <tr><td colspan="8" class="text-center p-4">Cargando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Bloqueados -->
+            <div id="tab-bloqueados" class="tab-content hidden">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white py-2">
+                        <h6 class="mb-0">Usuarios bloqueados</h6>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-sm mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Foto</th>
+                                        <th>Nombre</th>
+                                        <th>Email</th>
+                                        <th>Motivo</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="blocked-table-body">
+                                    <tr><td colspan="5" class="text-center p-4">Cargando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Costos de acceso -->
+            <div id="tab-accesos" class="tab-content hidden">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="mb-0">Planes de acceso</h6>
+                    <button class="btn btn-danger btn-sm" onclick="mostrarFormPlan()">+ Nuevo plan</button>
+                </div>
+
+                <!-- Form para nuevo plan / editar plan -->
+                <div id="plan-form" class="card border-0 shadow-sm mb-3 hidden">
+                    <div class="card-body">
+                        <h6 id="plan-form-title" class="mb-3">Nuevo plan</h6>
+                        <input type="hidden" id="plan-edit-id">
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <input type="text" id="plan-nombre" class="form-control" placeholder="Nombre del plan">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="number" id="plan-precio" class="form-control" step="0.01" placeholder="Precio ($)">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="number" id="plan-dias" class="form-control" placeholder="Días">
+                            </div>
+                            <div class="col-md-3">
+                                <textarea id="plan-desc" class="form-control" rows="1" placeholder="Descripción"></textarea>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <button class="btn btn-danger btn-sm" onclick="guardarPlan()">Guardar</button>
+                            <button class="btn btn-outline-secondary btn-sm" onclick="ocultarFormPlan()">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-sm mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>Descripción</th>
+                                        <th>Precio</th>
+                                        <th>Duración</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="plans-table-body">
+                                    <tr><td colspan="7" class="text-center p-4">Cargando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Editar datos -->
+            <div id="tab-editar" class="tab-content hidden">
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-header bg-white py-2">
+                        <h6 class="mb-0">Editar perfil de usuario</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2 mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Buscar usuario</label>
+                                <input type="text" id="edit-search" class="form-control" placeholder="Buscar por nombre o email..." oninput="buscarUsuarioEditar()">
+                            </div>
+                        </div>
+                        <div id="edit-results" class="small text-muted">Escribe para buscar un usuario...</div>
+
+                        <!-- Form de edición -->
+                        <div id="edit-form" class="hidden mt-3">
+                            <input type="hidden" id="edit-user-id">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Nombre</label>
+                                    <input type="text" id="edit-nombre" class="form-control">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Username</label>
+                                    <input type="text" id="edit-username" class="form-control">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Edad</label>
+                                    <input type="number" id="edit-edad" class="form-control" min="18" max="99">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">Bio</label>
+                                    <textarea id="edit-bio" class="form-control" rows="2"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">Avatar URL</label>
+                                    <input type="text" id="edit-avatar" class="form-control">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Género</label>
+                                    <select id="edit-genero" class="form-select"></select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Estado</label>
+                                    <select id="edit-estado" class="form-select" onchange="dashboardCargarMunicipios()"></select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Municipio</label>
+                                    <select id="edit-municipio" class="form-select" onchange="dashboardCargarParroquias()"></select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Parroquia</label>
+                                    <select id="edit-parroquia" class="form-select"></select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Ciudad</label>
+                                    <select id="edit-ciudad" class="form-select"></select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Bloqueado</label>
+                                    <select id="edit-bloqueado" class="form-select">
+                                        <option value="false">No</option>
+                                        <option value="true">Sí</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <button class="btn btn-danger btn-sm" onclick="guardarEdicionUsuario()">Guardar cambios</button>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="cancelarEdicion()">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Editar géneros -->
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Gestionar géneros</h6>
+                        <button class="btn btn-outline-danger btn-sm" onclick="mostrarFormGenero()">+ Nuevo género</button>
+                    </div>
+                    <div id="genero-form-container" class="hidden">
+                        <div class="card-body border-bottom">
+                            <div class="row g-2">
+                                <div class="col-md-4">
+                                    <input type="text" id="genero-nombre" class="form-control" placeholder="Nombre del género">
+                                </div>
+                                <div class="col-md-5">
+                                    <input type="text" id="genero-desc" class="form-control" placeholder="Descripción">
+                                </div>
+                                <div class="col-md-3 d-flex gap-2">
+                                    <input type="hidden" id="genero-edit-id">
+                                    <button class="btn btn-danger btn-sm" onclick="guardarGenero()">Guardar</button>
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="ocultarFormGenero()">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-sm mb-0">
+                                <thead class="table-light">
+                                    <tr><th>ID</th><th>Nombre</th><th>Descripción</th><th>Estado</th><th>Acciones</th></tr>
+                                </thead>
+                                <tbody id="generos-table-body">
+                                    <tr><td colspan="5" class="text-center p-4">Cargando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Editar pagos (historial completo) -->
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white py-2">
+                        <h6 class="mb-0">Historial completo de pagos</h6>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-sm mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Usuario</th>
+                                        <th>Plan</th>
+                                        <th>Monto</th>
+                                        <th>Método</th>
+                                        <th>Referencia</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="all-payments-table-body">
+                                    <tr><td colspan="8" class="text-center p-4">Cargando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenedor para notificaciones toast -->
+    <div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999;"></div>
+
+    <script src="js/config.js?v=V005"></script>
+    <script src="js/dashboard.js?v=V005"></script>
+</body>
+</html>

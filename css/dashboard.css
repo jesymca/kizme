@@ -1,0 +1,246 @@
+/* ==========================================
+   Estilos del Panel de Administración - Kizme
+   css/dashboard.css
+   ========================================== */
+
+/* --- Contenedor de login --- */
+#admin-login {
+    max-width: 400px;
+    margin: 0 auto;
+    padding-top: 80px;
+}
+
+#admin-login .card {
+    border-radius: 16px;
+}
+
+#admin-login img {
+    border-radius: 12px;
+}
+
+/* --- Pestañas: ocultar/mostrar --- */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* --- Tarjetas de estadísticas --- */
+.stat-card {
+    border-radius: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: default;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* --- Pestañas de navegación --- */
+#dashboard-tabs .nav-link {
+    color: #6c757d;
+    font-size: 0.9rem;
+    border: none;
+    padding: 0.5rem 1rem;
+    transition: color 0.2s;
+}
+
+#dashboard-tabs .nav-link.active {
+    color: #dc3545;
+    border-bottom: 3px solid #dc3545;
+    font-weight: 600;
+    background-color: transparent;
+}
+
+#dashboard-tabs .nav-link:hover {
+    color: #dc3545;
+}
+
+#dashboard-tabs .nav-link:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* --- Tabla de usuarios con fotos --- */
+.users-table img,
+#users-table-body img,
+#blocked-table-body img {
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #eee;
+}
+
+/* --- Badges de estado de pago --- */
+.badge-pendiente {
+    background-color: #ffc107;
+    color: #212529;
+    font-weight: 500;
+}
+
+.badge-aprobado {
+    background-color: #198754;
+    color: white;
+    font-weight: 500;
+}
+
+.badge-rechazado {
+    background-color: #dc3545;
+    color: white;
+    font-weight: 500;
+}
+
+/* --- Botones de acción en tablas --- */
+.table .btn-group .btn {
+    padding: 0.15rem 0.4rem;
+    font-size: 0.75rem;
+}
+
+/* --- Formulario de plan (borde lateral rojo) --- */
+#plan-form {
+    border-left: 4px solid #dc3545;
+}
+
+/* --- Resultados de búsqueda de edición --- */
+#edit-results .edit-result-item {
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#edit-results .edit-result-item:hover {
+    background-color: #f8f9fa;
+}
+
+#edit-results .edit-result-item img {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* --- Estados activo/inactivo en tabla --- */
+.badge-activo {
+    background-color: #198754;
+    color: white;
+}
+
+.badge-inactivo {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* --- Fila de bloqueado --- */
+.tr-bloqueado {
+    background-color: #fff5f5;
+}
+
+/* --- Scroll horizontal en tablas --- */
+.table-responsive {
+    max-height: none;
+    overflow-x: auto;
+}
+
+/* --- Tablas compactas --- */
+.table-sm th {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #495057;
+}
+
+.table-sm td {
+    font-size: 0.85rem;
+    vertical-align: middle;
+}
+
+/* --- Botón de acción en tablas --- */
+.btn-action {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 6px;
+    font-size: 0.75rem;
+}
+
+/* --- Toasts personalizados --- */
+#toast-container .toast {
+    min-width: 280px;
+}
+
+/* --- Cargando animación --- */
+.loading-pulse {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* --- Imagen placeholder --- */
+.img-placeholder {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #e9ecef;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    font-size: 0.7rem;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    #admin-login {
+        padding-top: 40px;
+    }
+
+    .stat-card {
+        padding: 0.75rem !important;
+    }
+
+    .stat-card .fs-2 {
+        font-size: 1.5rem;
+    }
+
+    #dashboard-tabs .nav-link {
+        font-size: 0.78rem;
+        padding: 0.4rem 0.6rem;
+    }
+
+    .table-sm th,
+    .table-sm td {
+        font-size: 0.75rem;
+    }
+
+    .container-fluid {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    #dashboard-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #dashboard-tabs::-webkit-scrollbar {
+        display: none;
+    }
+}

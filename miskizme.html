@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Kizme - Kizme</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css?v=V005">
+    <link rel="stylesheet" href="css/miskizme.css?v=V005">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-light bg-white shadow-sm">
+        <div class="container-fluid justify-content-between">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+                <img src="img/logo.png" alt="Logo" height="35">
+                <span class="text-danger fw-bold">Mis Kizme</span>
+            </a>
+            <div class="d-flex gap-2">
+                <a href="acceso.html" class="btn btn-outline-danger btn-sm">Desbloquear</a>
+                <a href="index.html" class="btn btn-outline-secondary btn-sm">Volver</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mt-4 mb-5 pb-5">
+        <!-- Encabezado con conteo -->
+        <div id="likes-header" class="text-center mb-4">
+            <h4 class="text-danger mb-1">Personas a las que les gustas</h4>
+            <p class="text-muted" id="likes-count">Cargando...</p>
+        </div>
+
+        <!-- Barra de progreso (gratis vs bloqueados) -->
+        <div id="progress-bar-container" class="mb-4 hidden">
+            <div class="d-flex justify-content-between mb-1">
+                <small class="text-muted">Visibles gratis: <span id="free-count">0</span>/10</small>
+                <small class="text-muted">Total: <span id="total-count">0</span></small>
+            </div>
+            <div class="progress" style="height: 8px; border-radius: 4px;">
+                <div id="progress-free" class="progress-bar bg-danger" style="width: 0%"></div>
+                <div id="progress-locked" class="progress-bar bg-secondary" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Indicador de suscripción activa -->
+        <div id="active-subscription" class="alert alert-success d-flex align-items-center gap-2 mb-4 hidden">
+            <span>&#9989;</span>
+            <div>
+                <strong>Suscripción activa</strong>
+                <p class="mb-0 small" id="sub-info"></p>
+            </div>
+        </div>
+
+        <!-- Cuadrícula de me gusta -->
+        <div id="likes-grid" class="row g-3">
+            <!-- Las tarjetas se generan dinámicamente -->
+        </div>
+
+        <!-- Grid vacío -->
+        <div id="no-likes" class="text-center text-muted mt-5 hidden">
+            <p class="fs-5">Aún nadie te ha dado me gusta.</p>
+            <p class="small">Sigue descubriendo perfiles para conseguir tus primeros Kizme.</p>
+            <a href="index.html" class="btn btn-danger mt-3">Descubrir perfiles</a>
+        </div>
+
+        <!-- Mensaje de desbloqueo -->
+        <div id="unlock-message" class="text-center mt-4 hidden">
+            <div class="card border-danger">
+                <div class="card-body">
+                    <h5 class="card-title text-danger">&#128274; Hay más personas por ver</h5>
+                    <p class="card-text">Tienes <span id="locked-count" class="fw-bold text-danger">0</span> me gusta adicionales. Desbloquea tu acceso mensual para verlos todos.</p>
+                    <a href="acceso.html" class="btn btn-danger btn-lg">Desbloquear ahora</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Navegación inferior -->
+    <nav class="navbar navbar-light bg-white fixed-bottom border-top d-flex justify-content-around py-1">
+        <a href="index.html" class="btn btn-link text-decoration-none text-muted text-center">
+            <span style="font-size: 1.5rem;">&#128269;</span><br><small>Descubrir</small>
+        </a>
+        <a href="miskizme.html" class="btn btn-link text-decoration-none text-danger text-center">
+            <span style="font-size: 1.5rem;">&#10084;&#65039;</span><br><small>Mis Kizme</small>
+        </a>
+        <a href="#" onclick="window.location.href='index.html';return false;" class="btn btn-link text-decoration-none text-muted text-center">
+            <span style="font-size: 1.5rem;">&#128172;</span><br><small>Chats</small>
+        </a>
+    </nav>
+
+    <script src="js/config.js?v=V005"></script>
+    <script src="js/miskizme.js?v=V005"></script>
+</body>
+</html>

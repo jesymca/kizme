@@ -1,0 +1,161 @@
+/* css/miskizme.css - Estilos para la página de Me Gusta */
+
+/* Cuadrícula de likes */
+#likes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+@media (min-width: 576px) {
+    #likes-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 768px) {
+    #likes-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (min-width: 992px) {
+    #likes-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+/* Tarjeta de like */
+.like-card {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.like-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12) !important;
+}
+
+/* Wrapper de imagen */
+.card-img-top-wrapper {
+    position: relative;
+    overflow: hidden;
+    height: 200px;
+}
+
+.like-card .card-img-top {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.like-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+/* Badge de match */
+.match-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: linear-gradient(135deg, #dc3545, #ff6b6b);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.4);
+    z-index: 2;
+}
+
+/* Overlay de bloqueado */
+.locked-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    backdrop-filter: blur(3px);
+}
+
+.locked-overlay span {
+    font-size: 2.5rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+/* Tarjeta bloqueada */
+.like-card.locked {
+    opacity: 0.7;
+    filter: grayscale(0.5);
+}
+
+.like-card.locked:hover {
+    transform: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+}
+
+/* Barra de progreso personalizada */
+#progress-bar-container .progress {
+    height: 8px;
+    border-radius: 4px;
+    background-color: #e9ecef;
+}
+
+#progress-free {
+    background: linear-gradient(90deg, #dc3545, #ff6b6b);
+    border-radius: 4px 0 0 4px;
+}
+
+#progress-locked {
+    background: linear-gradient(90deg, #6c757d, #adb5bd);
+    border-radius: 0 4px 4px 0;
+}
+
+/* Alerta de suscripción activa */
+#active-subscription {
+    border-radius: 12px;
+    border: 1px solid #198754;
+    background: linear-gradient(135deg, #d1e7dd, #e8f5e9);
+}
+
+/* Mensaje de desbloqueo */
+#unlock-message .card {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 2px solid #dc3545;
+}
+
+#unlock-message .card-body {
+    background: linear-gradient(135deg, #fff5f5, #ffffff);
+}
+
+/* Estado sin likes */
+#no-likes p {
+    font-size: 1.1rem;
+}
+
+/* Responsive para móviles */
+@media (max-width: 576px) {
+    .card-img-top-wrapper,
+    .like-card .card-img-top {
+        height: 160px;
+    }
+
+    .like-card .card-body {
+        padding: 8px !important;
+    }
+
+    .match-badge {
+        font-size: 0.65rem;
+        padding: 2px 8px;
+    }
+
+    .locked-overlay span {
+        font-size: 2rem;
+    }
+}
