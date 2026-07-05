@@ -271,6 +271,17 @@ async function cargarPerfilesParaDescubrir() {
             query = query.not('id', 'in', `(${idsInteractuados.join(',')})`);
         }
         
+        // También excluir perfiles que me hayan dado dislike
+        const { data: dislikesRecibidos } = await sb.from('interacciones')
+            .select('de_usuario_id')
+            .eq('para_usuario_id', currentUserId)
+            .eq('tipo', 'dislike');
+        
+        const idsDislikes = dislikesRecibidos.map(i => i.de_usuario_id);
+        if (idsDislikes.length > 0) {
+            query = query.not('id', 'in', `(${idsDislikes.join(',')})`);
+        }
+        
         const { data: perfiles, error } = await query.limit(1);
 
         const card = document.getElementById('profile-card');
@@ -316,6 +327,33 @@ async function registrarInteraccion(tipo) {
         console.error("Error al registrar interacción:", error);
         alert("Error: " + error.message);
         return;
+    }
+
+    // Si es like, verificar si hay match
+    if (tipo === 'like') {
+        // Verificar si el otro usuario ya me dio like
+        const { data: likeMutuo } = await sb.from('interacciones')
+            .select('*')
+            .eq('de_usuario_id', paraUsuarioId)
+            .eq('para_usuario_id', currentUserId)
+            .eq('tipo', 'like')
+            .single();
+        
+        if (likeMutuo) {
+            // ¡Es un match!
+            const matchData = {
+                usuario_1: currentUserId < paraUsuarioId ? currentUserId : paraUsuarioId,
+                usuario_2: currentUserId < paraUsuarioId ? paraUsuarioId : currentUserId
+            };
+            
+            await sb.from('matches').insert(matchData);
+            alert("🎉 ¡Es un match! Ahora pueden chatear.");
+            
+            // Recargar matches si estamos en la vista de chats
+            if (document.getElementById('chat-view').classList.contains('active')) {
+                cargarMatches();
+            }
+        }
     }
 
     // Animación

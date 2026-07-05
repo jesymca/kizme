@@ -1,16 +1,123 @@
-.view { display: none; }
-.view.active { display: block; }
-.hidden { display: none !important; }
+/* css/styles.css */
+.view {
+    display: none;
+}
 
-/* Botones de Like/Dislike */
-.btn-dislike { width: 60px; height: 60px; border: 1px solid #ddd !important; font-size: 24px; }
-.btn-like { width: 60px; height: 60px; border: 1px solid #ddd !important; font-size: 24px; color: #FF3B30; }
+.view.active {
+    display: block;
+}
 
-/* Chat */
-.messages-container { height: 350px; overflow-y: auto; background: #F5F5F5; display: flex; flex-direction: column; gap: 10px; }
-.message-bubble { max-width: 75%; padding: 10px 15px; border-radius: 15px; font-size: 14px; }
-.message-bubble.sent { background: #FF3B30; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
-.message-bubble.received { background: white; color: #333; align-self: flex-start; border: 1px solid #eee; border-bottom-left-radius: 2px; }
+.hidden {
+    display: none !important;
+}
 
-/* Tarjeta de Descubrir */
-.profile-card { position: absolute; width: 100%; }
+.profile-card {
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+.messages-container {
+    height: 350px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.message-bubble {
+    max-width: 75%;
+    padding: 8px 14px;
+    margin-bottom: 8px;
+    border-radius: 18px;
+    word-wrap: break-word;
+}
+
+.message-bubble.sent {
+    align-self: flex-end;
+    background-color: #dc3545;
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.message-bubble.received {
+    align-self: flex-start;
+    background-color: #e9ecef;
+    color: #212529;
+    border-bottom-left-radius: 4px;
+}
+
+#card-container {
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-like:hover {
+    background-color: #dc3545 !important;
+    color: white !important;
+}
+
+.btn-dislike:hover {
+    background-color: #6c757d !important;
+    color: white !important;
+}
+
+.navbar-brand img {
+    height: 35px;
+}
+
+#bottom-nav .btn {
+    font-size: 0.8rem;
+    padding: 8px 16px;
+}
+
+#bottom-nav .btn span {
+    display: block;
+    font-size: 1.5rem;
+    line-height: 1.2;
+}
+
+/* Mejoras para el perfil */
+#profile-preview {
+    border: 3px solid #dc3545;
+}
+
+/* Mejoras para los botones de swipe */
+.btn-like, .btn-dislike {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+}
+
+/* Estilos para la card de perfil */
+.profile-card .card-img-top {
+    height: 350px;
+    object-fit: cover;
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    
+    .card {
+        border-radius: 12px !important;
+    }
+    
+    .messages-container {
+        height: 300px;
+    }
+    
+    .profile-card .card-img-top {
+        height: 280px;
+    }
+    
+    .btn-like, .btn-dislike {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+}
