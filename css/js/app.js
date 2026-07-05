@@ -112,13 +112,19 @@ async function iniciarSesion() {
     await cargarPerfilUsuario();
 }
 
+function obtenerRedirectUrl() {
+    const currentUrl = new URL(window.location.href);
+    const pathname = currentUrl.pathname.endsWith('/') ? currentUrl.pathname : `${currentUrl.pathname}/`;
+    return `${currentUrl.origin}${pathname}`;
+}
+
 async function loginConGoogle() {
     try {
         document.getElementById('auth-message').innerText = "Redirigiendo a Google...";
         const { data, error } = await sb.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: window.location.origin,
+                redirectTo: obtenerRedirectUrl(),
                 queryParams: {
                     access_type: 'offline',
                     prompt: 'consent',
