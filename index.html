@@ -1,50 +1,125 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kizme</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        background: linear-gradient(135deg, #f8f9ff 0%, #eef2ff 100%);
-        min-height: 100vh;
-      }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DatingApp MVP V001</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-light">
 
-      .hero-card {
-        border: 0;
-        border-radius: 1.5rem;
-        box-shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
-      }
-
-      .logo-img {
-        max-width: 180px;
-        height: auto;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container py-5">
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
-          <div class="card hero-card p-4 p-md-5 text-center">
-            <img src="img/logo.png" alt="Logo de Kizme" class="logo-img mx-auto d-block" />
-            <h1 class="display-5 fw-bold mt-4 mb-3">Kizme</h1>
-            <p class="lead text-muted mb-4">
-              Una web para conocer personas, descubrir nuevas conexiones y construir relaciones auténticas.
-            </p>
-            <div class="alert alert-warning fw-bold fs-4 mb-4" role="alert">
-              ESTA EN CONSTRUCCION
-            </div>
-            <p class="mb-0 text-secondary">
-              Estamos preparando una experiencia moderna, sencilla y atractiva para que cada encuentro sea especial.
-            </p>
-          </div>
+    <nav class="navbar navbar-light bg-white shadow-sm">
+        <div class="container-fluid justify-content-between">
+            <a class="navbar-brand" href="#">
+                <img src="img/logo.png" alt="Logo" height="35">
+            </a>
+            <button id="logout-btn" class="btn btn-outline-danger btn-sm hidden" onclick="cerrarSesion()">Cerrar Sesión</button>
         </div>
-      </div>
-    </div>
-  </body>
+    </nav>
+
+    <main class="container mt-4 mb-5 pb-5" id="app-container">
+        
+        <!-- VISTA DE AUTENTICACIÓN -->
+        <section id="auth-view" class="view active">
+            <div class="card p-4 shadow-sm border-0 rounded-4">
+                <div class="card-body">
+                    <h1 class="text-center text-danger mb-4 display-6">Encuentra tu match</h1>
+                    <input type="text" id="auth-nombre" class="form-control mb-2 hidden-on-login" placeholder="Nombre completo">
+                    <input type="text" id="auth-username" class="form-control mb-2 hidden-on-login" placeholder="Nombre de usuario">
+                    <input type="email" id="auth-email" class="form-control mb-2" placeholder="Correo electrónico">
+                    <input type="password" id="auth-password" class="form-control mb-3" placeholder="Contraseña">
+                    
+                    <button id="login-btn" class="btn btn-danger w-100 mb-2" onclick="iniciarSesion()">Iniciar Sesión</button>
+                    <button id="register-btn" class="btn btn-outline-danger w-100 mb-3" onclick="registrarUsuario()">Registrarse</button>
+                    
+                    <div class="text-center text-muted my-3">O</div>
+                    
+                    <button class="btn btn-light border w-100 d-flex align-items-center justify-content-center gap-2" onclick="loginConGoogle()">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Google_Favicon_2025.svg/960px-Google_Favicon_2025.svg.png?_=20251015042304" width="20" alt="Google">
+                        Continuar con Google
+                    </button>
+                    <p id="auth-message" class="text-danger text-center mt-3 small"></p>
+                    <div class="text-center mt-3">
+                        <small><a href="#" onclick="toggleAuthMode(event)" id="toggle-link">¿No tienes cuenta? Regístrate</a></small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISTA DE PERFIL -->
+        <section id="profile-setup-view" class="view">
+            <div class="card p-4 shadow-sm border-0 rounded-4 text-center">
+                <div class="card-body">
+                    <h1 class="h3 text-danger mb-4">Termina tu perfil</h1>
+                    <img id="profile-preview" src="https://via.placeholder.com/150" class="rounded-circle shadow-sm mb-3" width="150" height="150" style="object-fit:cover;" alt="Foto de perfil">
+                    <input type="file" id="avatar-input" class="form-control mb-3" accept="image/*">
+                    <input type="text" id="setup-bio" class="form-control mb-3" placeholder="Cuéntanos sobre ti...">
+                    <select id="setup-genero" class="form-select mb-3">
+                        <option value="">Selecciona tu género</option>
+                        <option value="hombre">Hombre</option>
+                        <option value="mujer">Mujer</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                    <button class="btn btn-danger w-100" onclick="guardarPerfil()">Guardar y Empezar</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISTA DESCUBRIR -->
+        <section id="discover-view" class="view">
+            <h4 class="text-center mb-3 text-muted">Descubrir</h4>
+            <div id="card-container" class="card-container position-relative mb-4">
+                <div id="profile-card" class="card shadow border-0 rounded-4 overflow-hidden profile-card hidden">
+                    <img id="card-img" src="" class="card-img-top" alt="Foto" style="height: 350px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title mb-0" id="card-name"></h5>
+                        <p class="card-text text-muted small" id="card-bio"></p>
+                    </div>
+                </div>
+                <div id="no-profiles" class="text-center text-muted mt-5 hidden">
+                    <p>No hay más perfiles por ahora. Vuelve más tarde.</p>
+                </div>
+            </div>
+            <div class="d-flex justify-content-around">
+                <button class="btn btn-light rounded-circle shadow btn-lg btn-dislike" onclick="registrarInteraccion('dislike')">❌</button>
+                <button class="btn btn-light rounded-circle shadow btn-lg btn-like" onclick="registrarInteraccion('like')">❤️</button>
+            </div>
+        </section>
+
+        <!-- VISTA CHATS -->
+        <section id="chat-view" class="view">
+            <h4 class="mb-3 text-muted">Tus Matches</h4>
+            <div id="matches-list" class="list-group mb-4"></div>
+            
+            <div id="chat-room" class="card shadow-sm border-0 rounded-4 hidden">
+                <div class="card-header bg-white border-0 d-flex align-items-center">
+                    <button class="btn btn-sm btn-link text-decoration-none text-muted me-2" onclick="cerrarChat()">&larr;</button>
+                    <h5 class="mb-0" id="chat-with"></h5>
+                </div>
+                <div class="card-body messages-container p-3" id="messages-container"></div>
+                <div class="card-footer bg-white border-0 p-2">
+                    <div class="input-group">
+                        <input type="text" id="message-input" class="form-control" placeholder="Escribe un mensaje...">
+                        <button class="btn btn-danger" onclick="enviarMensaje()">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- NAVEGACIÓN INFERIOR -->
+    <nav id="bottom-nav" class="navbar navbar-light bg-white fixed-bottom border-top hidden d-flex justify-content-around">
+        <button class="btn btn-link text-decoration-none text-muted" onclick="cambiarVista('discover-view')">
+            <span style="font-size: 1.5rem;">🔍</span><br><small>Descubrir</small>
+        </button>
+        <button class="btn btn-link text-decoration-none text-muted" onclick="cambiarVista('chat-view')">
+            <span style="font-size: 1.5rem;">💬</span><br><small>Chats</small>
+        </button>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
 </html>
