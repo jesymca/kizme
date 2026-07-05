@@ -5,17 +5,26 @@
 
 /* --- Contenedor de login --- */
 #admin-login {
-    max-width: 400px;
+    max-width: 520px;
     margin: 0 auto;
-    padding-top: 80px;
+    padding-top: 40px;
 }
 
 #admin-login .card {
-    border-radius: 16px;
+    border-radius: 20px;
 }
 
 #admin-login img {
-    border-radius: 12px;
+    border-radius: 14px;
+}
+
+#admin-login .btn-danger {
+    padding: 0.8rem 1rem;
+    font-weight: 600;
+}
+
+#admin-login .form-control-lg {
+    padding: 0.8rem 1rem;
 }
 
 /* --- Pestañas: ocultar/mostrar --- */

@@ -12,17 +12,23 @@
 <body class="bg-light">
 
     <!-- LOGIN ADMIN -->
-    <div id="admin-login" class="container mt-5">
+    <div id="admin-login" class="container py-5">
         <div class="row justify-content-center">
-            <div class="col-md-4">
-                <div class="card shadow border-0 rounded-4">
-                    <div class="card-body p-4 text-center">
-                        <img src="img/logo.png" alt="Logo" height="50" class="mb-3">
-                        <h4 class="text-danger mb-1">Panel de Administración</h4>
-                        <p class="text-muted small mb-4">Acceso restringido <span class="badge bg-secondary ms-1">V005</span></p>
-                        <input type="text" id="admin-user" class="form-control mb-2" placeholder="Usuario administrador" value="admin">
-                        <input type="password" id="admin-pass" class="form-control mb-3" placeholder="Contraseña" onkeydown="if(event.key==='Enter'){event.preventDefault();adminLogin();}">
-                        <button class="btn btn-danger w-100" onclick="adminLogin()">Ingresar</button>
+            <div class="col-12 col-sm-10 col-md-8 col-lg-12">
+                <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                    <div class="card-body p-4 p-md-5 text-center">
+                        <div class="mb-4">
+                            <img src="img/logo.png" alt="Logo" height="60" class="mb-3">
+                            <h3 class="text-danger mb-2 fw-bold">Panel de Administración</h3>
+                            <p class="text-muted mb-0">Acceso restringido <span class="badge bg-secondary ms-1">V005</span></p>
+                        </div>
+                        <div class="text-start">
+                            <label class="form-label small fw-bold text-muted">Usuario administrador</label>
+                            <input type="text" id="admin-user" class="form-control form-control-lg mb-3" placeholder="Usuario administrador" value="admin">
+                            <label class="form-label small fw-bold text-muted">Contraseña</label>
+                            <input type="password" id="admin-pass" class="form-control form-control-lg mb-4" placeholder="Contraseña" onkeydown="if(event.key==='Enter'){event.preventDefault();adminLogin();}">
+                        </div>
+                        <button class="btn btn-danger btn-lg w-100" onclick="adminLogin()">Ingresar</button>
                         <p id="login-error" class="text-danger text-center mt-3 small"></p>
                     </div>
                 </div>
