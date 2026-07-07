@@ -14,7 +14,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-YSMS384BFZ');
 </script>
     <meta charset="UTF-8">
@@ -24,7 +23,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <title>Kizme - Encuentra tu match</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css?v=V005">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-light">
     <!-- Google Tag Manager (noscript) -->
@@ -34,188 +32,49 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <nav class="navbar navbar-light bg-white shadow-sm">
         <div class="container-fluid justify-content-between">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
                 <img src="img/logo.png" alt="Logo" height="35">
+                <span class="fw-bold text-danger">Kizme</span>
             </a>
-            <button id="logout-btn" class="btn btn-outline-danger btn-sm hidden" onclick="cerrarSesion()">Cerrar Sesión</button>
+            <div class="d-flex gap-2">
+                <a href="app.html" class="btn btn-danger btn-sm">Entrar a la app</a>
+                <a href="politica-privacidad.html" class="btn btn-outline-secondary btn-sm">Privacidad</a>
+            </div>
         </div>
     </nav>
 
-    <main class="container mt-4 mb-5 pb-5" id="app-container">
-        
-        <!-- VISTA DE AUTENTICACIÓN -->
-        <section id="auth-view" class="view active">
-            <div class="card p-4 shadow-sm border-0 rounded-4">
-                <div class="card-body">
-                    <h1 class="text-center text-danger mb-4 display-6">Encuentra tu match</h1>
-                    <input type="text" id="auth-nombre" class="form-control mb-2 hidden-on-login" placeholder="Nombre completo">
-                    <input type="text" id="auth-username" class="form-control mb-2 hidden-on-login" placeholder="Nombre de usuario">
-                    <input type="email" id="auth-email" class="form-control mb-2" placeholder="Usuario">
-                    <input type="password" id="auth-password" class="form-control mb-3" placeholder="Clave de acceso">
-                    
-                    <button id="login-btn" class="btn btn-danger w-100 mb-2" onclick="iniciarSesion()">Iniciar Sesión</button>
-                    <button id="register-btn" class="btn btn-outline-danger w-100 mb-3" onclick="isLogin ? toggleAuthMode(event) : registrarUsuario()">Registrarse</button>
-                    
-                    <div id="auth-divider" class="text-center text-muted my-3 hidden-on-login">O</div>
-                    
-                    <button id="google-login-btn" class="btn btn-light border w-100 d-flex align-items-center justify-content-center gap-2 hidden-on-login" onclick="loginConGoogle()">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Google_Favicon_2025.svg/960px-Google_Favicon_2025.svg.png?_=20251015042304" width="20" alt="Google">
-                        Continuar con Google
-                    </button>
-                    <p id="auth-message" class="text-danger text-center mt-3 small"></p>
-                    <div class="text-center mt-3">
-                        <small><a href="#" onclick="toggleAuthMode(event)" id="toggle-link">¿No tienes cuenta? Regístrate</a></small>
+    <main class="container py-5">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5">
+                    <h1 class="display-6 fw-bold text-danger mb-3">Conecta con personas de forma clara y segura</h1>
+                    <p class="lead text-muted mb-4">Kizme es una app de conexión para descubrir perfiles, completar tu información y empezar conversaciones con personas que comparten tus intereses.</p>
+                    <div class="d-flex flex-wrap gap-2 mb-4">
+                        <a href="app.html" class="btn btn-danger btn-lg">Entrar a la app</a>
+                        <a href="politica-privacidad.html" class="btn btn-outline-danger btn-lg">Ver política de privacidad</a>
+                    </div>
+                    <ul class="text-muted small mb-0">
+                        <li>Tu perfil es visible de forma transparente.</li>
+                        <li>No solicitamos información financiera ni datos sensibles fuera del registro.</li>
+                        <li>Tu experiencia está diseñada para ser sencilla, honesta y segura.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                    <img src="img/placeholder.jpg" alt="Kizme" class="img-fluid" style="height: 320px; object-fit: cover;">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold text-danger mb-2">Qué encontrarás en Kizme</h5>
+                        <p class="text-muted small mb-0">Un espacio simple para crear tu perfil, ver personas y empezar conversaciones desde un entorno claro y confiable.</p>
                     </div>
                 </div>
             </div>
-        </section>
-
-        <!-- VISTA DE PERFIL -->
-        <section id="profile-setup-view" class="view">
-            <div class="card p-4 shadow-sm border-0 rounded-4">
-                <div class="card-body">
-                    <div class="text-center mb-4">
-                        <h1 class="h3 text-danger mb-1">Termina tu perfil</h1>
-                        <p class="text-muted small mb-0">Completa tus datos para empezar a conocer personas</p>
-                    </div>
-                    <img id="profile-preview" src="img/placeholder.jpg" class="rounded-circle shadow-sm mb-3 mx-auto d-block" width="130" height="130" style="object-fit:cover; border: 3px solid #dc3545;" alt="Foto de perfil">
-                    <input type="file" id="avatar-input" class="form-control mb-3" accept="image/*">
-
-                    <div class="row g-2 mb-3">
-                        <div class="col-12">
-                            <label class="form-label small fw-bold text-muted">Foto de perfil</label>
-                        </div>
-                    </div>
-
-                    <input type="text" id="setup-bio" class="form-control mb-3" placeholder="Cuéntanos sobre ti..." rows="2">
-                    <div class="row g-2 mb-3">
-                        <div class="col-6">
-                            <label class="form-label small fw-bold text-muted">Edad</label>
-                            <input type="number" id="setup-edad" class="form-control" placeholder="Edad" min="18" max="99">
-                        </div>
-                        <div class="col-6">
-                            <label class="form-label small fw-bold text-muted">País</label>
-                            <input type="text" id="setup-pais" class="form-control" value="Venezuela" placeholder="País">
-                        </div>
-                    </div>
-
-                    <!-- Ubicación Venezuela - Selectores en cascada -->
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-danger">Tu ubicación en Venezuela</label>
-                        <div class="row g-2">
-                            <div class="col-md-6">
-                                <select id="setup-estado" class="form-select">
-                                    <option value="">Estado...</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <select id="setup-ciudad-select" class="form-select" disabled>
-                                    <option value="">Ciudad...</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <select id="setup-municipio" class="form-select" disabled>
-                                    <option value="">Municipio...</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <select id="setup-parroquia" class="form-select" disabled>
-                                    <option value="">Parroquia...</option>
-                                </select>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <!-- Género y búsqueda -->
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-danger">Tu identidad</label>
-                        <div class="row g-2">
-                            <div class="col-md-6">
-                                <select id="setup-genero" class="form-select">
-                                    <option value="">Tu género...</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <select id="setup-buscando-genero" class="form-select">
-                                    <option value="">Quieres conocer a...</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button class="btn btn-danger w-100 mt-2" onclick="guardarPerfil()">Guardar y Empezar</button>
-                  <div style="height: 100px;"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- VISTA DESCUBRIR -->
-        <section id="discover-view" class="view">
-            <h4 class="text-center mb-3 text-muted">Descubrir</h4>
-            <div id="card-container" class="card-container position-relative mb-4">
-                <div id="profile-card" class="card shadow border-0 rounded-4 overflow-hidden profile-card hidden">
-                    <img id="card-img" src="" class="card-img-top" alt="Foto" style="height: 350px; object-fit: cover;">
-                    <div class="card-body">
-                        <h5 class="card-title mb-0" id="card-name"></h5>
-                        <p class="card-text text-muted small mb-1" id="card-location"></p>
-                        <p class="card-text text-muted small" id="card-bio"></p>
-                    </div>
-                </div>
-                <div id="no-profiles" class="text-center text-muted mt-5 hidden">
-                    <p>No hay más perfiles por ahora. Vuelve más tarde.</p>
-                </div>
-            </div>
-            <div class="d-flex justify-content-around">
-                <button class="btn btn-light rounded-circle shadow btn-lg btn-dislike" onclick="registrarInteraccion('dislike')">&#10060;</button>
-                <button class="btn btn-light rounded-circle shadow btn-lg btn-like" onclick="registrarInteraccion('like')">&#10084;&#65039;</button>
-            </div>
-        </section>
-
-        <!-- VISTA CHATS -->
-        <section id="chat-view" class="view">
-            <h4 class="mb-3 text-muted">Tus Matches</h4>
-            <div id="matches-list" class="list-group mb-4"></div>
-            
-            <div id="chat-room" class="card shadow-sm border-0 rounded-4 hidden">
-                <div class="card-header bg-white border-0 d-flex align-items-center">
-                    <button class="btn btn-sm btn-link text-decoration-none text-muted me-2" onclick="cerrarChat()">&larr;</button>
-                    <h5 class="mb-0" id="chat-with"></h5>
-                </div>
-                <div class="card-body messages-container p-3" id="messages-container"></div>
-                <div class="card-footer bg-white border-0 p-2">
-                    <div class="input-group">
-                        <input type="text" id="message-input" class="form-control" placeholder="Escribe un mensaje...">
-                        <button class="btn btn-danger" onclick="enviarMensaje()">Enviar</button>
-                    </div>
-                </div>
-            </div>
-        </section>
+        </div>
     </main>
 
     <footer class="container py-4 text-center small text-muted">
-        <p class="mb-1">Kizme es una app de conexión y no solicita información financiera ni datos sensibles fuera del registro e inicio de sesión.</p>
+        <p class="mb-1">Kizme es una app de conexión hecha para personas reales y no para engañar a los visitantes.</p>
         <a href="politica-privacidad.html" class="text-danger text-decoration-none">Política de privacidad</a>
     </footer>
-
-    <!-- NAVEGACIÓN INFERIOR -->
-    <nav id="bottom-nav" class="navbar navbar-light bg-white fixed-bottom border-top hidden d-flex justify-content-around">
-        <button class="btn btn-link text-decoration-none text-muted" onclick="cambiarVista('discover-view')">
-            <span style="font-size: 1.5rem;">&#128269;</span><br><small>Descubrir</small>
-        </button>
-        <a href="miskizme.html" class="btn btn-link text-decoration-none text-muted">
-            <span style="font-size: 1.5rem;">&#10084;&#65039;</span><br><small>Mis Kizme</small>
-        </a>
-        <button class="btn btn-link text-decoration-none text-muted" onclick="cambiarVista('chat-view')">
-            <span style="font-size: 1.5rem;">&#128172;</span><br><small>Chats</small>
-        </button>
-        <a href="acceso.html" class="btn btn-link text-decoration-none text-muted">
-            <span style="font-size: 1.5rem;">&#128274;</span><br><small>Acceso</small>
-        </a>
-    </nav>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/config.js?v=V005"></script>
-    <script src="js/app.js?v=V005"></script>
 </body>
 </html>
